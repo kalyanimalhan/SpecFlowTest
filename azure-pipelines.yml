@@ -1,38 +1,39 @@
-# ASP.NET Core
-
-# Build and test ASP.NET Core projects targeting .NET Core.
-# Add steps that run tests, create a NuGet package, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
-
 trigger:
-- main
+  branches:
+    include:
+      - main
 
-pool:
-  vmImage: windows-latest
+stages:
+  - stage: Build
+    displayName: Build Solution
+    pool:
+      vmImage: 'ubuntu-latest'
 
-variables:
-  buildConfiguration: 'Release'
+    variables:
+      buildConfiguration: 'Release'
 
-steps:
- # Restore nuget packages.
-- task: NuGetCommand@2
-  displayName: 'Authenticate with BDO-Artifacts NuGet feed'
-  inputs:
-    command: custom
-    arguments: sources update -Name "BDO" -Username "vsts" -Password "$(System.AccessToken)" -StorePasswordInClearText -ConfigFile ./nuget.config
+    jobs:
+      - job: Build
+        displayName: Build and publish solution      
+        steps:
+        - task: NuGetCommand@2
+          displayName: 'Authenticate with BDO-Artifacts NuGet feed'
+          inputs:
+            command: custom
+            arguments: sources update -Name "BDO" -Username "vsts" -Password "$(System.AccessToken)" -StorePasswordInClearText -ConfigFile ./nuget.config
 
-- task: UseDotNet@2
-  inputs:
-    version: '5.0.x'
-    packageType: runtime
-
-- task: UseDotNet@2
-  inputs:
-    version: '6.x'
-    includePreviewVersions: true # Required for preview versions
-
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-     projects: 'SpecFlowProjectDemo/*.csproj'
-     arguments: --output $(System.DefaultWorkingDirectory)/publish_output --configuration $(buildConfiguration) 
+        - task: UseDotNet@2
+          inputs:
+            packageType: 'sdk'
+            version: '6.x'
+          displayName: 'Use .Net Code SDK 6'
+        - task: DotNetCoreCLI@2
+          displayName: 'Building function app'
+          inputs:
+            command: 'build'
+            projects: './SpecFlowProjectDemo.sln'
+            noCache: true
+            arguments: '--configuration $(buildConfiguration)'
+        
+       
+          
