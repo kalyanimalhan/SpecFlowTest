@@ -13,9 +13,21 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- task: DotNetCoreCLI@2
-  displayName: 'Building with - dotnet build $(buildConfiguration)'
+ # Restore nuget packages.
+- task: NuGetCommand@2
+  displayName: 'Authenticate with BDO-Artifacts NuGet feed'
   inputs:
-    command: build
+    command: custom
+    arguments: sources update -Name "BDO" -Username "vsts" -Password "$(System.AccessToken)" -StorePasswordInClearText -ConfigFile ./nuget.config
+
+- task: UseDotNet@2
+  inputs:
+    version: '6.x'
+    includePreviewVersions: true # Required for preview versions
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet build'
+  inputs:
+    command: 'build'
     projects: './SpecFlowProjectDemo.sln'
     arguments: --configuration $(buildConfiguration)
