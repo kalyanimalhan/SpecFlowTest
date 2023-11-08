@@ -29,5 +29,4 @@ steps:
   displayName: 'dotnet build'
   inputs:
     command: 'build'
-    projects: './SpecFlowProjectDemo.sln'
-    arguments: --configuration $(buildConfiguration)
+    configuration: $(buildConfiguration)
