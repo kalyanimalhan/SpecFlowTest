@@ -41,7 +41,5 @@ stages:
         - task: SpecFlowPlus@0
           inputs:
             generatorSource: 'FeatureFolder'
-            projectFilePath: 'Features'
-            projectName: 'SpecFlowProjectDemo'
-            testExecutionJson: 'SpecFlowProjectDemo\**\TestExecution.json'
+            projectFilePath: '$(System.DefaultWorkingDirectory)'
             projectLanguage: 'en'
