@@ -23,9 +23,16 @@ steps:
 
 - task: UseDotNet@2
   inputs:
+    version: '5.0.x'
+    packageType: runtime
+
+- task: UseDotNet@2
+  inputs:
     version: '6.x'
     includePreviewVersions: true # Required for preview versions
 
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
+     projects: './SpecFlowProjectDemo.sln'
+     arguments: --configuration $(buildConfiguration)
