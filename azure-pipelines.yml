@@ -35,7 +35,7 @@ stages:
           displayName: 'Build'
           inputs:
             command: 'build'
-            projects: '.SpecFlowProjectDemo/SpecFlowProjectDemo.sln'
+            projects: './SpecFlowProjectDemo.sln'
             noCache: true
             arguments: '--configuration $(buildConfiguration)'
         
