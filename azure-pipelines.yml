@@ -38,8 +38,16 @@ stages:
             projects: './SpecFlowProjectDemo.sln'
             noCache: true
             arguments: '--configuration $(buildConfiguration)'
+       # - task: SpecFlowPlus@0
+        #  inputs:
+         #   generatorSource: 'FeatureFolder'
+        #    projectFilePath: '$(System.DefaultWorkingDirectory)'
+        #    projectLanguage: 'en'
+       
         - task: SpecFlowPlus@0
+          displayName: 'SpecFlow+ build step.'
           inputs:
-            generatorSource: 'FeatureFolder'
-            projectFilePath: '$(System.DefaultWorkingDirectory)'
-            projectLanguage: 'en'
+            projectFilePath: Features
+            projectName: CalculateProject
+            testExecutionJson: '$(Build.SourcesDirectory)/SpecSpecFlowProjectDemoFlow/bin/Debug/net6.0/TestExecustion.json'
+            bindingAssemblies: '$(Build.SourcesDirectory)/SpecFlowProjectDemo/bin/Debug/net6.0/SpecFlowProjectDemo.dll'
