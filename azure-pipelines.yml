@@ -38,6 +38,11 @@ stages:
             projects: './SpecFlowProjectDemo.sln'
             noCache: true
             arguments: '--configuration $(buildConfiguration)'
+        - task: PublishPipelineArtifact@1
+          inputs:
+            targetPath: '$(Build.ArtifactStagingDirectory)'
+            artifactName: 'drop'
+          displayName: 'Publish Artifact'
        # - task: SpecFlowPlus@0
         #  inputs:
          #   generatorSource: 'FeatureFolder'
