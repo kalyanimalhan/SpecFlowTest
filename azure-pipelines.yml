@@ -38,6 +38,14 @@ stages:
             projects: './SpecFlowProjectDemo.sln'
             noCache: true
             arguments: '--configuration $(buildConfiguration)'
+        - task: DotNetCoreCLI@2
+          displayName: "Publishing azure functions"
+          inputs:
+            command: publish
+            publishWebProjects: false
+            projects: './SpecFlowProjectDemo.csproj'
+            arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/SpecFlowProjectDemo'
+            zipAfterPublish: true
         - task: PublishPipelineArtifact@1
           inputs:
             targetPath: '$(Build.ArtifactStagingDirectory)'
