@@ -38,7 +38,7 @@ jobs:
         working-directory: ${{ github.workspace }}
 
       - name: Upload Test Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: SpecFlow-Test-Report
           path: TestResults/TestExecution.json
