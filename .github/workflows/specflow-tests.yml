@@ -16,6 +16,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Verify files in the repo
+        run: ls -al 
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
@@ -28,8 +31,9 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: Run SpecFlow Tests
-        run: dotnet test SpecFlowProjectDemo.sln --no-build --configuration Release
-        working-directory: SpecFlowProjectDemo  # Update this to your test project folder
+        run: |
+            cd $GITHUB_WORKSPACE
+            dotnet test SpecFlowProjectDemo.sln --no-build --configuration Release
 
       - name: Generate SpecFlow Report
         run: |
