@@ -30,18 +30,13 @@ jobs:
       - name: Build the project
         run: dotnet build --configuration Release
 
-      - name: Run SpecFlow Tests
+      - name: Run SpecFlow tests with SpecFlow.Plus HTML report
         run: |
-            dotnet test ./SpecFlowProjectDemo.sln --no-build --configuration Release
+         dotnet test ./SpecFlowProjectDemo.sln --no-build --configuration Release --logger "specflow+;LogFilePath=TestResults/test-report.html"
 
-      - name: Generate SpecFlow Report
-        run: |
-          mkdir -p TestResults
-          cp SpecFlowProjectDemo/bin/Debug/net6.0/TestExecution.json TestResults/TestExecution.json
-        working-directory: ${{ github.workspace }}
-
-      - name: Upload Test Report
-        uses: actions/upload-artifact@v4
+      - name: Upload Test Results (XML and HTML)
+        uses: actions/upload-artifact@v3
         with:
-          name: SpecFlow-Test-Report
-          path: TestResults/TestExecution.json
+            name: test-results
+            path: |   
+                TestResults/test-report.html
