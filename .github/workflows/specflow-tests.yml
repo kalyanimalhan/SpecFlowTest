@@ -1,0 +1,44 @@
+name: SpecFlow Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: windows-latest 
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0.x'  
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build the project
+        run: dotnet build --configuration Release
+
+      - name: Run SpecFlow Tests
+        run: dotnet test --no-build --configuration Release
+        working-directory: SpecFlowProjectDemo  # Update this to your test project folder
+
+      - name: Generate SpecFlow Report
+        run: |
+          mkdir -p TestResults
+          cp SpecFlowProjectDemo/bin/Debug/net6.0/TestExecution.json TestResults/TestExecution.json
+        working-directory: ${{ github.workspace }}
+
+      - name: Upload Test Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: SpecFlow-Test-Report
+          path: TestResults/TestExecution.json
